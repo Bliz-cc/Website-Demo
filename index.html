@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      (function() {
+        var script = document.createElement('script');
+        script.id = "bliz-snippet";
+        script.setAttribute("data-key", "<YOUR CLIENT KEY FROM BLIZ.CC>");
+        script.src = './bliz-script.js';
+        script.async = true;
+        document.head.appendChild(script);
+      })();
+    </script>
+    <!-- Google Tag Manager -->
+   
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    
+    <title>Fashion Boutique | Premium Clothing</title>
+    <style>
+      /* Reset and base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* Header styles */
+      header {
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        z-index: 100;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+        align-items: center;
+      }
+
+      .nav-links li {
+        margin-left: 2rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #3498db;
+      }
+
+      /* NEW: Special style for Nav Link */
+      .nav-special {
+        color: #e67e22 !important;
+        font-weight: 700 !important;
+        border: 2px solid #e67e22;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+
+      .nav-special:hover {
+        background-color: #e67e22;
+        color: #fff !important;
+      }
+
+      /* Hero section */
+      .hero {
+        height: 100vh;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url("/api/placeholder/1200/800") center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        padding-top: 70px;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        padding: 0 20px;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+      }
+
+      .btn-container {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        transition: transform 0.2s, background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+      }
+
+      /* NEW: Prominent Demo Button Style */
+      .btn-accent {
+        background-color: #e67e22; /* Orange to stand out */
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
+      }
+
+      .btn-accent:hover {
+        background-color: #d35400;
+        box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6);
+      }
+
+      /* Featured products section */
+      .featured {
+        padding: 5rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: #2c3e50;
+      }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .product-card {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-img {
+        height: 250px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .product-info {
+        padding: 1.5rem;
+      }
+
+      .product-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .product-price {
+        font-weight: 700;
+        color: #3498db;
+      }
+
+      /* About section */
+      .about {
+        background-color: #f8f9fa;
+        padding: 5rem 5%;
+      }
+
+      .about-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+      }
+
+      .about-img {
+        flex: 1;
+        height: 400px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .about-text {
+        flex: 1;
+      }
+
+      .about-text h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+      }
+
+      .about-text p {
+        margin-bottom: 1rem;
+      }
+
+      /* Newsletter section */
+      .newsletter {
+        padding: 5rem 5%;
+        background-color: #2c3e50;
+        color: #fff;
+        text-align: center;
+      }
+
+      .newsletter-content {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .newsletter h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .newsletter p {
+        margin-bottom: 2rem;
+      }
+
+      .newsletter-form {
+        display: flex;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .newsletter-input {
+        flex: 1;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 4px 0 0 4px;
+        font-size: 1rem;
+      }
+
+      .newsletter-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #1a252f;
+        color: #fff;
+        padding: 3rem 5%;
+        text-align: center;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .social-links {
+        margin: 1.5rem 0;
+      }
+
+      .social-links a {
+        color: #fff;
+        margin: 0 0.5rem;
+        font-size: 1.5rem;
+        text-decoration: none;
+      }
+
+      .copyright {
+        margin-top: 2rem;
+        color: #bdc3c7;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .about-content {
+          flex-direction: column;
+        }
+
+        .newsletter-form {
+          flex-direction: column;
+        }
+
+        .newsletter-input {
+          border-radius: 4px;
+          margin-bottom: 1rem;
+        }
+
+        .newsletter-btn {
+          border-radius: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-K3VN9TJ6"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">FashionHub</div>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#featured">Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <!-- UPDATED: Captcha Demo Link -->
+          <li><a href="./demos/captcha-demo.html" class="nav-special">Captcha Demo</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>Elevate Your Style Demo Website</h1>
+        <p>
+          Discover our premium collection of fashion essentials curated for the
+          modern trendsetter.
+        </p>
+        
+        <!-- PROMINENT BUTTON CONTAINER -->
+        <div class="btn-container">
+            <a href="#featured" class="btn">Shop Collection</a>
+            <!-- UPDATED: Prominent Hero Button -->
+            <a href="./demos/captcha-demo.html" class="btn btn-accent">Try Captcha Demo →</a>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured" id="featured">
+      <h2 class="section-title">Featured Products</h2>
+      <div class="products">
+        <div class="product-card">
+          <img
+            src="/api/placeholder/300/300"
+            alt="Product"
+            class="product-img"
+          />
+          <div class="product-info">
+            <h3 class="product-title">Classic White Tee</h3>
+            <p class="product-price">$29.99</p>
+            <a href="product.html" class="btn">View Product</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <img
+            src="/api/placeholder/300/300"
+            alt="Product"
+            class="product-img"
+          />
+          <div class="product-info">
+            <h3 class="product-title">Denim Jacket</h3>
+            <p class="product-price">$89.99</p>
+            <a href="product.html" class="btn">View Product</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <img
+            src="/api/placeholder/300/300"
+            alt="Product"
+            class="product-img"
+          />
+          <div class="product-info">
+            <h3 class="product-title">Summer Dress</h3>
+            <p class="product-price">$59.99</p>
+            <a href="product.html" class="btn">View Product</a>
+          </div>
+        </div>
+        <div class="product-card">
+          <img
+            src="/api/placeholder/300/300"
+            alt="Product"
+            class="product-img"
+          />
+          <div class="product-info">
+            <h3 class="product-title">Slim Fit Pants</h3>
+            <p class="product-price">$49.99</p>
+            <a href="product.html" class="btn">View Product</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="about-content">
+        <img src="/api/placeholder/600/400" alt="About Us" class="about-img" />
+        <div class="about-text">
+          <h2>Our Story</h2>
+          <p>
+            Founded in 2010, FashionHub has been at the forefront of sustainable
+            and ethical fashion. We believe in creating timeless pieces that not
+            only look good but also feel good.
+          </p>
+          <p>
+            Our team of dedicated designers work tirelessly to bring you the
+            latest trends while ensuring that our production processes remain
+            environmentally friendly and socially responsible.
+          </p>
+          <p>
+            We source our materials from certified suppliers who share our
+            vision of a fashion industry that respects both people and the
+            planet.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter" id="contact">
+      <div class="newsletter-content">
+        <h2>Join Our Community</h2>
+        <p>
+          Subscribe to our newsletter and be the first to know about new
+          collections, exclusive offers, and fashion tips.
+        </p>
+        <form class="newsletter-form">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            class="newsletter-input"
+            required
+          />
+          <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="logo">FashionHub</div>
+        <div class="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+          <a href="#">Pinterest</a>
+        </div>
+        <p>123 Fashion Street, Style City, SC 12345</p>
+        <p>Email: info@fashionhub.com | Phone: (123) 456-7890</p>
+        <p class="copyright">© 2025 FashionHub. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Initialize Widget via GTM-style dataLayer -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "pageLoaded",
+        widgetURL: "https://bliz.cc/suwv", // Dynamic URL from your Bliz dashboard
+      });
+    </script>
+  </body>
+</html>

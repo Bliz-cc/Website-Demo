@@ -1,31 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout | FashionHub</title>
     <script>
-      (function() {
-        var script = document.createElement('script');
+      (function () {
+        var script = document.createElement("script");
         script.id = "bliz-snippet";
-        script.setAttribute("data-key", "<YOUR CLIENT KEY FROM BLIZ>");
-        script.src = './analytics-snippet.js';
+        script.setAttribute(
+          "data-key",
+          "ChvR4pZCUFuX_QLuJzJpdUnABFrhlnCA_1WFmRjkQTY",
+        );
+        script.src = "./bliz-script.js";
         script.async = true;
         document.head.appendChild(script);
       })();
     </script>
-    <!-- <script>
-      (function() {
-        var script = document.createElement('script');
-        script.id = "bliz-snippet";
-        script.setAttribute("data-key", "vMCvXZiJ3CAlDqBVOzKLSJ3T6QHUYYfTAGU9bva5aQo");
-        script.src = "./snippet.js";
-        script.async = true;
-        document.head.appendChild(script);
-      })();
-      </script> -->
     <style>
-      /* Reset and base styles (copied from index for consistency) */
+      /* Reset and base styles */
       * {
         margin: 0;
         padding: 0;
@@ -163,7 +156,6 @@
         background-color: #2980b9;
       }
 
-      /* Footer (copied from index for consistency) */
       footer {
         background-color: #1a252f;
         color: #fff;
@@ -194,7 +186,6 @@
     </style>
   </head>
   <body>
-    <!-- Header -->
     <header>
       <nav class="navbar">
         <div class="logo">FashionHub</div>
@@ -207,10 +198,9 @@
       </nav>
     </header>
 
-    <!-- Checkout Section -->
     <section class="checkout">
       <h2 class="section-title">Checkout</h2>
-      <div class="checkout-form">
+      <form class="checkout-form" id="orderForm">
         <div class="form-group">
           <label for="name">Full Name</label>
           <input type="text" id="name" placeholder="John Doe" required />
@@ -221,8 +211,7 @@
             type="email"
             id="email"
             placeholder="john@example.com"
-            required
-          />
+            required />
         </div>
         <div class="form-group">
           <label for="address">Shipping Address</label>
@@ -230,8 +219,7 @@
             type="text"
             id="address"
             placeholder="123 Main St, City, State, ZIP"
-            required
-          />
+            required />
         </div>
         <div class="form-group">
           <label for="card">Card Number</label>
@@ -239,12 +227,11 @@
             type="text"
             id="card"
             placeholder="1234 5678 9012 3456"
-            required
-          />
+            required />
         </div>
         <div class="order-summary">
           <div class="summary-item">
-            <span>Classic White Tee</span>
+            <span id="prodName">Classic White Tee</span>
             <span>$29.99</span>
           </div>
           <div class="summary-item">
@@ -253,14 +240,14 @@
           </div>
           <div class="summary-total">
             <span>Total</span>
-            <span>$34.99</span>
+            <!-- We will scrape this value -->
+            <span id="totalDisplay">$34.99</span>
           </div>
         </div>
-        <button type="submit" class="btn">Place Order</button>
-      </div>
+        <button type="submit" class="btn" id="submitBtn">Place Order</button>
+      </form>
     </section>
 
-    <!-- Footer -->
     <footer>
       <div class="footer-content">
         <div class="logo">FashionHub</div>
@@ -275,5 +262,61 @@
         <p class="copyright">© 2025 FashionHub. All rights reserved.</p>
       </div>
     </footer>
+
+    <!-- REALISTIC TRACKING LOGIC -->
+    <script>
+      document
+        .getElementById("orderForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const btn = document.getElementById("submitBtn");
+          const originalBtnText = btn.innerText;
+
+          // Visual feedback
+          btn.innerText = "Processing...";
+          btn.style.opacity = "0.7";
+          btn.disabled = true;
+
+          // 1. Extract realistic data from the DOM
+          const customerName = document.getElementById("name").value;
+          const totalText = document.getElementById("totalDisplay").innerText; // "$34.99"
+          const numericValue = parseFloat(totalText.replace(/[^0-9.]/g, ""));
+          const productName = document.getElementById("prodName").innerText;
+
+          // 2. Prepare the payload
+          const orderData = {
+            value: numericValue,
+            currency: "USD",
+            order_id: "FH-" + Date.now().toString().slice(-6), // Realistic timestamp-based ID
+            product_title: productName + " (Customer: " + customerName + ")",
+          };
+
+          // 3. Send to BlizTracker
+          if (window.BlizTracker && window.BlizTracker.isActive()) {
+            const success = window.BlizTracker.trackRevenue(orderData);
+
+            if (success) {
+              console.log("[Bliz] Revenue captured:", orderData);
+              setTimeout(() => {
+                alert(
+                  `Order Successful!\n\nID: ${orderData.order_id}\nAmount: $${orderData.value}\n\nThe Bliz Script has sent this event to the dashboard.`,
+                );
+                btn.innerText = originalBtnText;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+              }, 800);
+            }
+          } else {
+            // If no session is active (no bliz_sid in URL)
+            alert(
+              "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
+            );
+            btn.innerText = originalBtnText;
+            btn.style.opacity = "1";
+            btn.disabled = false;
+          }
+        });
+    </script>
   </body>
 </html>

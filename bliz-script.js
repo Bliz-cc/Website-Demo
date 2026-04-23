@@ -1,11 +1,9 @@
 /**
- * Bliz Tracking Script v1.9
+ * Bliz Tracking Script v2.1
  *
- * Changes over v1.8:
- * - sessionStartKey added — set once in init(), never reset, tracks full session duration
- * - pageStartKey now resets on every PAGE_VIEW (SPA navigation resets per-page timer)
- * - PAGE_EXIT payload carries time_on_site (numeric, seconds) as dedicated field
- * - label still carries time_on_page:Xs for human-readable context
+ * Changes over v2.0:
+ * - Renamed 'action' to 'action_source' in payloads
+ * - Captures ID or Class as action_source for clicks and forms
  */
 
 (function () {
@@ -21,11 +19,12 @@
       revenueOrderKey:  "bliz_revenue_orders",
       events: {
         PAGE_VIEW:      "PAGE_VIEW",
-        PAGE_EXIT:      "PAGE_EXIT",
+        SESSION_END:    "SESSION_END",
         LINK_CLICK:     "LINK_CLICK",
         BUTTON_CLICK:   "BUTTON_CLICK",
-        FORM_SUBMIT:    "FORM_SUBMIT",
-        REVENUE_SUBMIT: "REVENUE_SUBMIT",
+        SUBMIT_FORM:    "SUBMIT_FORM",
+        REVENUE:        "REVENUE",
+        SCROLL:         "SCROLL",
       },
     };
   
@@ -175,7 +174,7 @@
     // API — XHR, fire-and-forget
     // ---------------------------------------------------------------------------
   
-    var API_ENDPOINT = "http://localhost:3000/api/v1/page-events";
+    var API_ENDPOINT = "http://localhost:3000/api/v1/analytics";
   
     function getApiKeyFromScript() {
       var script = document.getElementById("bliz-snippet");
@@ -205,27 +204,43 @@
       return new Date().toISOString();
     }
   
-    function createEvent(action, label, pathname) {
+    function createEvent(eventType, actionSource, label, pathname) {
       return {
-        action:    action   || "N/A",
-        label:     label    || "N/A",
-        pathname:  pathname || getPathname(),
-        url:       window.location.origin + window.location.pathname,
-        timestamp: getTimestamp(),
+        event_type:    eventType,
+        event_source:  "WEB",
+        action_source: actionSource || "N/A",
+        label:         label        || "N/A",
+        pathname:      pathname     || getPathname(),
+        url:           window.location.origin + window.location.pathname,
+        referrer:      document.referrer || undefined,
+        timestamp:     getTimestamp(),
       };
     }
   
     function buildBasePayload(event, sessionId) {
-      return {
-        session_id: sessionId,
-        link_id:    window.blizLinkId || getStoredLinkId() || undefined,
-        order:      getAndIncrementOrder(sessionId),
-        action:     event.action,
-        label:      event.label,
-        pathname:   event.pathname,
-        url:        event.url,
-        timestamp:  event.timestamp,
+      var payload = {
+        session_id:    sessionId,
+        link_id:       window.blizLinkId || getStoredLinkId() || undefined,
+        event_type:    event.event_type,
+        event_source:  event.event_source,
+        action_source: event.action_source,
+        label:         event.label,
+        pathname:      event.pathname,
+        url:           event.url,
+        referrer:      event.referrer,
+        timestamp:     event.timestamp,
       };
+
+      // Calculate time metrics
+      try {
+        var now          = Date.now();
+        var sessionStart = parseInt(window.sessionStorage.getItem(CONFIG.sessionStartKey) || "0", 10);
+        if (sessionStart) {
+          payload.time_on_site = Math.round((now - sessionStart) / 1000);
+        }
+      } catch (e) {}
+
+      return payload;
     }
   
     function processEvent(event) {
@@ -235,7 +250,7 @@
     }
   
     // ---------------------------------------------------------------------------
-    // REVENUE_SUBMIT
+    // REVENUE
     // ---------------------------------------------------------------------------
   
     function trackRevenue(data) {
@@ -264,13 +279,13 @@
         return false;
       }
   
-      var event   = createEvent(CONFIG.events.REVENUE_SUBMIT, "revenue");
+      var event   = createEvent(CONFIG.events.REVENUE, "revenue");
       var payload = buildBasePayload(event, sessionId);
   
       payload.revenue       = value;
       payload.currency      = currency           || undefined;
-      payload.order_id      = data.order_id      || undefined;
-      payload.product_title = data.product_title || undefined;
+      payload.item_count    = data.item_count    || undefined;
+      payload.discount_value = data.discount_value || undefined;
   
       sendEventToAPI(payload);
       return true;
@@ -291,12 +306,16 @@
         if (!target) return;
   
         var tagName = target.tagName.toLowerCase();
-        var action  = tagName === "button" ? CONFIG.events.BUTTON_CLICK : CONFIG.events.LINK_CLICK;
+        var eventType = tagName === "button" ? CONFIG.events.BUTTON_CLICK : CONFIG.events.LINK_CLICK;
+        
+        // Capture specific source (ID or Class)
+        var source = target.id || target.className.split(" ")[0] || tagName;
+        
         var label   = (target.innerText || "").substring(0, 100).trim()
                         || (tagName === "a" ? target.href : "button")
                         || "N/A";
   
-        processEvent(createEvent(action, label));
+        processEvent(createEvent(eventType, source, label));
       });
     }
   
@@ -305,8 +324,37 @@
     // ---------------------------------------------------------------------------
   
     function setupFormListener() {
-      document.addEventListener("submit", function () {
-        processEvent(createEvent(CONFIG.events.FORM_SUBMIT, "form_submit"));
+      document.addEventListener("submit", function (e) {
+        var form = e.target;
+        var source = form.id || form.className.split(" ")[0] || "form";
+        processEvent(createEvent(CONFIG.events.SUBMIT_FORM, source, "form_submit"));
+      });
+    }
+
+    // ---------------------------------------------------------------------------
+    // Scroll tracking
+    // ---------------------------------------------------------------------------
+    var maxScroll = 0;
+    function setupScrollListener() {
+      var throttleTimeout;
+      window.addEventListener("scroll", function() {
+        if (throttleTimeout) return;
+        throttleTimeout = setTimeout(function() {
+          throttleTimeout = null;
+          var h = document.documentElement, 
+              b = document.body,
+              st = 'scrollTop',
+              sh = 'scrollHeight';
+          var percent = Math.round((h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100);
+          
+          if (percent > maxScroll && percent % 25 === 0 && percent > 0) {
+            maxScroll = percent;
+            var event = createEvent(CONFIG.events.SCROLL, "scroll_trigger", percent + "%");
+            var payload = buildBasePayload(event, window.blizSessionId || getStoredSessionId());
+            payload.scroll_depth = percent;
+            sendEventToAPI(payload);
+          }
+        }, 500);
       });
     }
   
@@ -325,7 +373,7 @@
       try { window.sessionStorage.setItem(CONFIG.pageStartKey, Date.now().toString()); } catch (e) {}
   
       var label = pathname.replace(/\//g, "").substring(0, 100) || "home";
-      processEvent(createEvent(CONFIG.events.PAGE_VIEW, label));
+      processEvent(createEvent(CONFIG.events.PAGE_VIEW, "page_navigation", label));
     }
   
     function patchHistoryMethod(method) {
@@ -359,11 +407,7 @@
     }
   
     // ---------------------------------------------------------------------------
-    // PAGE_EXIT — visibilitychange:hidden + pagehide, deduped via exitFired flag
-    //
-    // Sends two time values:
-    //   label:        "time_on_page:42s"  — seconds on the current pathname
-    //   time_on_site: 187                 — total seconds since session start
+    // SESSION_END — visibilitychange:hidden + pagehide, deduped via exitFired flag
     // ---------------------------------------------------------------------------
   
     var exitFired = false;
@@ -375,21 +419,10 @@
       var sessionId = window.blizSessionId || getStoredSessionId();
       if (!sessionId) return;
   
-      var timeOnPage = 0;
-      var timeOnSite = 0;
-  
-      try {
-        var now          = Date.now();
-        var pageStart    = parseInt(window.sessionStorage.getItem(CONFIG.pageStartKey)    || "0", 10);
-        var sessionStart = parseInt(window.sessionStorage.getItem(CONFIG.sessionStartKey) || "0", 10);
-        if (pageStart)    timeOnPage = Math.round((now - pageStart)    / 1000);
-        if (sessionStart) timeOnSite = Math.round((now - sessionStart) / 1000);
-      } catch (e) {}
-  
-      var event   = createEvent(CONFIG.events.PAGE_EXIT, "time_on_page:" + timeOnPage + "s");
+      var event   = createEvent(CONFIG.events.SESSION_END, "visibility_hidden");
       var payload = buildBasePayload(event, sessionId);
-      payload.time_on_site = timeOnSite;
-  
+      
+      // time_on_site is already handled in buildBasePayload
       sendEventToAPI(payload);
     }
   
@@ -421,6 +454,7 @@
     setupPageViewListener();
     setupClickListener();
     setupFormListener();
+    setupScrollListener();
     setupExitListener();
     window.BlizTracker = BlizTracker;
   

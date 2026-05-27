@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout | FashionHub</title>
+        <!-- <script>
+  (function() {
+    var script = document.createElement('script');
+    script.id = "bliz-snippet";
+    script.setAttribute("data-key", "8zP9g59qy1npGlFQ85EJKNL7QjQ-iRGFA5V0CfjJpxs");
+    script.src = './tracker.js'
+    script.async = true;
+    document.head.appendChild(script);
+  })(); -->
+<!-- </script> -->
     <!-- <script>
       (function () {
         var script = document.createElement("script");
@@ -18,6 +28,7 @@
       })();
     </script> -->
     <!-- Google Tag Manager -->
+    
     <script>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -30,6 +41,7 @@
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-K3VN9TJ6");
     </script>
+
     <!-- End Google Tag Manager -->
     <style>
       /* Reset and base styles */
@@ -262,6 +274,28 @@
       </form>
     </section>
 
+    <section class="checkout" style="padding-top: 0; margin-top: -2rem;">
+      <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 1rem;">Test Conversion</h2>
+      <form class="checkout-form" id="leadForm">
+        <div class="form-group">
+          <label for="lead_email">Email for Newsletter</label>
+          <input type="email" id="lead_email" placeholder="subscriber@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="lead_event">Conversion Type</label>
+          <select id="lead_event" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background-color: #fff;">
+            <option value="LEAD">LEAD</option>
+            <option value="SIGNUP" selected>SIGNUP</option>
+            <option value="APP_INSTALL">APP_INSTALL</option>
+            <option value="EMAIL_COLLECTED">EMAIL_COLLECTED</option>
+            <option value="FORM_SUBMITTED">FORM_SUBMITTED</option>
+            <option value="CUSTOM">CUSTOM</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" id="leadBtn" style="margin-top: 1rem;">Subscribe (Trigger Conversion)</button>
+      </form>
+    </section>
+
     <footer>
       <div class="footer-content">
         <div class="logo">FashionHub</div>
@@ -323,6 +357,54 @@
             }
           } else {
             // If no session is active (no bliz_sid in URL)
+            alert(
+              "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
+            );
+            btn.innerText = originalBtnText;
+            btn.style.opacity = "1";
+            btn.disabled = false;
+          }
+        });
+
+      document
+        .getElementById("leadForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const btn = document.getElementById("leadBtn");
+          const originalBtnText = btn.innerText;
+
+          btn.innerText = "Submitting...";
+          btn.style.opacity = "0.7";
+          btn.disabled = true;
+
+          const email = document.getElementById("lead_email").value;
+          const eventType = document.getElementById("lead_event").value;
+
+          const conversionData = {
+            event: eventType,
+            name: "Newsletter signup",
+            metadata: {
+              email: email,
+              source: "checkout_test_page"
+            }
+          };
+
+          if (window.BlizTracker && window.BlizTracker.isActive()) {
+            const success = window.BlizTracker.trackConversion(conversionData);
+
+            if (success) {
+              console.log("[Bliz] Conversion captured:", conversionData);
+              setTimeout(() => {
+                alert(
+                  `Conversion Successful!\n\nEvent: ${conversionData.event}\n\nThe Bliz Script has sent this conversion event to the dashboard.`,
+                );
+                btn.innerText = originalBtnText;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+              }, 800);
+            }
+          } else {
             alert(
               "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
             );

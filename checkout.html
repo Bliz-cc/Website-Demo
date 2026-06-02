@@ -101,6 +101,21 @@
         color: #3498db;
       }
 
+      /* Special style for Nav Link */
+      .nav-special {
+        color: #e67e22 !important;
+        font-weight: 700 !important;
+        border: 2px solid #e67e22;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        align-self: center;
+      }
+
+      .nav-special:hover {
+        background-color: #e67e22;
+        color: #fff !important;
+      }
+
       /* Checkout section */
       .checkout {
         padding: 8rem 5% 5rem;
@@ -217,9 +232,8 @@
         <div class="logo">FashionHub</div>
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
-          <li><a href="#featured">Products</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html#featured">Products</a></li>
+          <li><a href="checkout.html" class="nav-special">Captcha Demo</a></li>
         </ul>
       </nav>
     </header>

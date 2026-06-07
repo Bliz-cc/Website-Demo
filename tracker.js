@@ -10,10 +10,12 @@
 (function () {
   "use strict";
 
+  var currentSidToken = null;
+  var BLIZ_CLIENT_SIDE_XMLK_SECRET = "bliz_secret_2024";
+
   var CONFIG = {
-    sessionIdParam: "bliz_sid",
-    storageKey: "bliz_session_id",
-    linkIdKey: "bliz_link_id",
+    sessionIdParam: "blizid",
+    storageKey: "blizid",
     revenueOrderKey: "bliz_revenue_orders",
     stages: {
       VIEW: "VIEW",
@@ -25,23 +27,22 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Session ID parsing — base64url decode, then split on '&'
+  // Session ID parsing — directly use JWE token
   // ---------------------------------------------------------------------------
 
-  function parseSessionParam(raw) {
-    if (!raw) return { sessionId: null, linkId: null };
-    try {
-      var decoded = atob(raw.replace(/-/g, "+").replace(/_/g, "/"));
-      var parts = decoded.split("&");
-      return {
-        sessionId: parts[0] || null,
-        linkId: parts[1] || null,
-      };
-    } catch (e) {
-      console.warn("[Bliz] Failed to decode bliz_sid:", e);
-      return { sessionId: null, linkId: null };
-    }
+  // Helper to find script element by either its new name or old name
+  function getApiKeyFromScript() {
+    var script = document.getElementById("bliz-snippet");
+    return script ? script.getAttribute("data-key") : null;
   }
+
+  function parseSessionParam(raw) {
+    return raw || null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Session / Storage helpers
+  // ---------------------------------------------------------------------------
 
   function getQueryParam(param) {
     try {
@@ -63,31 +64,21 @@
     return null;
   }
 
-  function storeSession(sessionId, linkId) {
+  function storeSidToken(sidToken) {
     try {
-      if (window.sessionStorage) {
-        window.sessionStorage.setItem(CONFIG.storageKey, sessionId);
-        if (linkId) window.sessionStorage.setItem(CONFIG.linkIdKey, linkId);
+      if (window.sessionStorage && sidToken) {
+        window.sessionStorage.setItem(CONFIG.storageKey, sidToken);
         return true;
       }
     } catch (e) {}
     return false;
   }
 
-  function getStoredSessionId() {
+  function getStoredSidToken() {
     try {
       return (
         window.sessionStorage &&
         window.sessionStorage.getItem(CONFIG.storageKey)
-      );
-    } catch (e) {}
-    return null;
-  }
-
-  function getStoredLinkId() {
-    try {
-      return (
-        window.sessionStorage && window.sessionStorage.getItem(CONFIG.linkIdKey)
       );
     } catch (e) {}
     return null;
@@ -120,18 +111,14 @@
 
   function init() {
     var rawParam = getQueryParam(CONFIG.sessionIdParam);
-    var parsed = parseSessionParam(rawParam);
-    var urlSessionId = parsed.sessionId;
-    var urlLinkId = parsed.linkId;
-    var storedSession = getStoredSessionId();
+    var urlSidToken = parseSessionParam(rawParam);
+    var storedSidToken = getStoredSidToken();
 
-    if (urlSessionId) {
-      storeSession(urlSessionId, urlLinkId);
-      window.blizSessionId = urlSessionId;
-      window.blizLinkId = urlLinkId;
+    if (urlSidToken) {
+      storeSidToken(urlSidToken);
+      currentSidToken = urlSidToken;
     } else {
-      window.blizSessionId = storedSession;
-      window.blizLinkId = getStoredLinkId();
+      currentSidToken = storedSidToken;
     }
   }
 
@@ -139,26 +126,64 @@
   // API — XHR, fire-and-forget
   // ---------------------------------------------------------------------------
 
-  // var API_ENDPOINT = "http://localhost:3000/api/v1/analytics";
-  var API_ENDPOINT = "https://api.bliz.cc/api/v1/analytics";
+  // var API_ENDPOINT = "http://localhost:3000/api/v1/external-analytics/web";
+  var API_ENDPOINT = "https://api.bliz.cc/api/v1/external-analytics/web";
 
-  function getApiKeyFromScript() {
-    var script = document.getElementById("bliz-snippet");
-    return script ? script.getAttribute("data-key") : null;
+  function obfuscate(payload, apiKey, sidToken) {
+    var authToken = sidToken || apiKey;
+    var minified = {
+      s: payload.stage,
+      es: payload.event_source,
+      src: payload.source,
+      si: payload.source_identifier,
+      sl: payload.source_location,
+      ts: payload.timestamp,
+      r: payload.revenue,
+      c: payload.currency,
+      e: payload.event,
+      cu: payload.customer,
+      m: payload.metadata,
+      s_id: payload.session_id,
+      l_id: payload.link_id,
+      tk: authToken,
+      ak: apiKey
+    };
+
+    // Remove undefined or null keys to reduce payload size
+    for (var key in minified) {
+      if (minified.hasOwnProperty(key)) {
+        if (minified[key] === undefined || minified[key] === null) {
+          delete minified[key];
+        }
+      }
+    }
+
+    var jsonStr = JSON.stringify(minified);
+    var utf8Str = unescape(encodeURIComponent(jsonStr));
+    var maskKey = BLIZ_CLIENT_SIDE_XMLK_SECRET;
+    var xorStr = "";
+    for (var i = 0; i < utf8Str.length; i++) {
+      xorStr += String.fromCharCode(
+        utf8Str.charCodeAt(i) ^ maskKey.charCodeAt(i % maskKey.length)
+      );
+    }
+    return btoa(xorStr);
   }
 
   function sendEventToAPI(payload) {
     var apiKey = getApiKeyFromScript();
+    var sidToken = currentSidToken || getStoredSidToken();
+    var obfuscatedData = obfuscate(payload, apiKey, sidToken);
+
     var xhr = new XMLHttpRequest();
     xhr.onerror = function () {};
     xhr.ontimeout = function () {};
     try {
       xhr.open("POST", API_ENDPOINT, true);
       xhr.setRequestHeader("accept", "*/*");
-      xhr.setRequestHeader("Content-Type", "application/json");
-      if (apiKey) xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
+      xhr.setRequestHeader("Content-Type", "text/plain");
       xhr.timeout = 5000;
-      xhr.send(JSON.stringify(payload));
+      xhr.send(obfuscatedData);
     } catch (e) {}
   }
 
@@ -170,7 +195,7 @@
     return new Date().toISOString();
   }
 
-  function createEvent(stage, source, sourceIdentifier) {
+  function createEvent(stage, source, sourceIdentifier, eventName, customer) {
     return {
       stage: stage,
       event_source: "WEB",
@@ -178,13 +203,13 @@
       source_identifier: sourceIdentifier,
       source_location: getPathname(),
       timestamp: getTimestamp(),
+      event: eventName || null,
+      customer: customer || null,
     };
   }
 
-  function buildBasePayload(event, sessionId) {
+  function buildBasePayload(event) {
     var payload = {
-      session_id: sessionId,
-      link_id: window.blizLinkId || getStoredLinkId() || undefined,
       stage: event.stage,
       event_source: event.event_source,
       source: event.source,
@@ -192,22 +217,28 @@
       source_location: event.source_location,
       timestamp: event.timestamp,
     };
+    if (event.event) {
+      payload.event = event.event;
+    }
+    if (event.customer) {
+      payload.customer = event.customer;
+    }
     return payload;
   }
 
   function processEvent(event) {
-    var sessionId = window.blizSessionId || getStoredSessionId();
-    if (!sessionId) return;
-    sendEventToAPI(buildBasePayload(event, sessionId));
+    var sidToken = currentSidToken || getStoredSidToken();
+    if (!sidToken) return;
+    sendEventToAPI(buildBasePayload(event));
   }
 
   // ---------------------------------------------------------------------------
   // REVENUE (CONVERT)
   // ---------------------------------------------------------------------------
 
-  function trackRevenue(data) {
-    var sessionId = window.blizSessionId || getStoredSessionId();
-    if (!sessionId) {
+  function trackRevenue(data, customerOpt) {
+    var sidToken = currentSidToken || getStoredSidToken();
+    if (!sidToken) {
       console.warn("[Bliz] trackRevenue called but no active session.");
       return false;
     }
@@ -241,46 +272,51 @@
       return false;
     }
 
+    var eventName = data.event;
+    var customer = (data && data.customer) || customerOpt || null;
+    var metadata =
+      data && data.metadata && typeof data.metadata === "object"
+        ? data.metadata
+        : null;
     var event = createEvent(
       CONFIG.stages.CONVERT,
       "purchase",
       data.order_id || getPathname(),
+      eventName,
+      customer,
     );
-    var payload = buildBasePayload(event, sessionId);
+    var payload = buildBasePayload(event);
 
     payload.revenue = value;
     payload.currency = currency || "USD";
+    if (metadata) {
+      payload.metadata = metadata;
+    }
 
     sendEventToAPI(payload);
     return true;
   }
 
-  function trackConversion(data) {
-    var sessionId = window.blizSessionId || getStoredSessionId();
-    if (!sessionId) {
+  function trackConversion(data, customerOpt) {
+    var sidToken = currentSidToken || getStoredSidToken();
+    if (!sidToken) {
       console.warn("[Bliz] trackConversion called but no active session.");
       return false;
     }
 
-    var eventName =
-      data && data.event && typeof data.event === "string"
-        ? data.event.toUpperCase().trim()
-        : null;
-    var metadata =
-      data && data.metadata && typeof data.metadata === "object"
-        ? data.metadata
-        : null;
+    var eventName = data.event;
+    var metadata = data.metadata;
+    var customer = (data && data.customer) || customerOpt || null;
 
     var event = createEvent(
       CONFIG.stages.CONVERSION,
       (data && data.name) || "conversion",
       getPathname(),
+      eventName,
+      customer,
     );
-    var payload = buildBasePayload(event, sessionId);
+    var payload = buildBasePayload(event);
 
-    if (eventName) {
-      payload.event = eventName;
-    }
     if (metadata) {
       payload.metadata = metadata;
     }
@@ -291,12 +327,12 @@
 
   // GTM CustomEvent: window.dispatchEvent(new CustomEvent('bliz:revenue', { detail: { value: 49.99, currency: 'USD' } }))
   window.addEventListener("bliz:revenue", function (e) {
-    trackRevenue(e.detail || {});
+    trackRevenue(e.detail || {}, (e.detail && e.detail.customer) || null);
   });
 
   // GTM CustomEvent: window.dispatchEvent(new CustomEvent('bliz:conversion', { detail: { event: 'LEAD', metadata: { source: 'button' } } }))
   window.addEventListener("bliz:conversion", function (e) {
-    trackConversion(e.detail || {});
+    trackConversion(e.detail || {}, (e.detail && e.detail.customer) || null);
   });
 
   // ---------------------------------------------------------------------------
@@ -383,14 +419,11 @@
   // ---------------------------------------------------------------------------
 
   var BlizTracker = {
-    getSessionId: function () {
-      return window.blizSessionId || getStoredSessionId();
-    },
-    getLinkId: function () {
-      return window.blizLinkId || getStoredLinkId();
+    getSidToken: function () {
+      return currentSidToken || getStoredSidToken();
     },
     isActive: function () {
-      return !!(window.blizSessionId || getStoredSessionId());
+      return !!(currentSidToken || getStoredSidToken());
     },
     getApiKey: function () {
       return getApiKeyFromScript();
@@ -407,5 +440,10 @@
   setupPageViewListener();
   setupClickListener();
   setupFormListener();
-  window.BlizTracker = BlizTracker;
+  Object.freeze(BlizTracker);
+  Object.defineProperty(window, "BlizTracker", {
+    value: BlizTracker,
+    writable: false,
+    configurable: false,
+  });
 })();

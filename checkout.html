@@ -298,12 +298,12 @@
         <div class="form-group">
           <label for="lead_event">Conversion Type</label>
           <select id="lead_event" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background-color: #fff;">
-            <option value="LEAD">LEAD</option>
-            <option value="SIGNUP" selected>SIGNUP</option>
-            <option value="APP_INSTALL">APP_INSTALL</option>
-            <option value="EMAIL_COLLECTED">EMAIL_COLLECTED</option>
+            <option value="LEAD_CAPTURED">LEAD</option>
+            <option value="LEAD_CAPTURED" selected>SIGNUP</option>
+            <option value="APP_INSTALLED">APP_INSTALL</option>
+            <option value="NEWSLETTER_SUBSCRIBED">EMAIL_COLLECTED</option>
             <option value="FORM_SUBMITTED">FORM_SUBMITTED</option>
-            <option value="CUSTOM">CUSTOM</option>
+            <option value="CUSTOM_EVENT">CUSTOM</option>
           </select>
         </div>
         <button type="submit" class="btn" id="leadBtn" style="margin-top: 1rem;">Subscribe (Trigger Conversion)</button>
@@ -342,6 +342,7 @@
 
           // 1. Extract realistic data from the DOM
           const customerName = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
           const totalText = document.getElementById("totalDisplay").innerText; // "$34.99"
           const numericValue = parseFloat(totalText.replace(/[^0-9.]/g, ""));
           const productName = document.getElementById("prodName").innerText;
@@ -352,11 +353,18 @@
             currency: "USD",
             order_id: "FH-" + Date.now().toString().slice(-6), // Realistic timestamp-based ID
             product_title: productName + " (Customer: " + customerName + ")",
+            event: "PURCHASE_COMPLETED",
+            customer: email,
+            metadata: {
+              product_name: productName,
+              category: "Apparel",
+              customer_name: customerName
+            }
           };
 
           // 3. Send to BlizTracker
           if (window.BlizTracker && window.BlizTracker.isActive()) {
-            const success = window.BlizTracker.trackRevenue(orderData);
+            const success = window.BlizTracker.trackRevenue(orderData, email);
 
             if (success) {
               console.log("[Bliz] Revenue captured:", orderData);
@@ -401,11 +409,12 @@
             metadata: {
               email: email,
               source: "checkout_test_page"
-            }
+            },
+            customer: email,
           };
 
           if (window.BlizTracker && window.BlizTracker.isActive()) {
-            const success = window.BlizTracker.trackConversion(conversionData);
+            const success = window.BlizTracker.trackConversion(conversionData, email);
 
             if (success) {
               console.log("[Bliz] Conversion captured:", conversionData);

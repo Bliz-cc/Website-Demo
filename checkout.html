@@ -147,7 +147,8 @@
         font-weight: 500;
       }
 
-      .form-group input {
+      .form-group input,
+      .form-group select {
         width: 100%;
         padding: 0.8rem;
         border: 1px solid #ddd;
@@ -310,6 +311,112 @@
       </form>
     </section>
 
+    <section class="checkout" style="padding-top: 0; margin-top: -2rem;">
+      <!-- Cart Simulation Form (ORDER_CREATED Event) -->
+      <form class="checkout-form" id="cartSimForm" style="background: #ffffff; border: 1.5px solid #16a085;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="color: #16a085; margin: 0;">Cart Simulation (ORDER_CREATED)</h3>
+          <span style="background: #e8f8f5; color: #16a085; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">trackOrderCreate</span>
+        </div>
+        <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1.25rem;">
+          Simulate a user adding products to their cart. Submitting will fire the <code>ORDER_CREATED</code> conversion event via <code>window.BlizTracker.trackOrderCreate()</code>.
+        </p>
+
+        <!-- Order & Currency inputs -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_order_id">Cart / Order ID</label>
+            <input type="text" id="cart_order_id" value="CART-101" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_currency">Currency</label>
+            <select id="cart_currency">
+              <option value="USD" selected>USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GEL">GEL (₾)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Customer email and phone -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_email">Customer Email</label>
+            <input type="email" id="cart_email" placeholder="customer@example.com" value="shopper@example.com" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_phone">Customer Phone</label>
+            <input type="tel" id="cart_phone" placeholder="+1234567890" value="+1555019234" />
+          </div>
+        </div>
+
+        <!-- 3 Products to Add -->
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Products Catalog (Add to Cart)</label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Classic White Tee</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: TEE-WHT • $29.99</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="TEE-WHT" data-name="Classic White Tee" data-price="29.99" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Slim Denim Jeans</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: JNS-BLU • $69.00</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="JNS-BLU" data-name="Slim Denim Jeans" data-price="69.00" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Urban Leather Sneakers</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: SNK-LTH • $120.00</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="SNK-LTH" data-name="Urban Leather Sneakers" data-price="120.00" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <button type="button" id="cartAddAllBtn" style="padding: 0.4rem 0.85rem; background: #e8f8f5; border: 1px solid #16a085; color: #16a085; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+            + Add All 3 Products
+          </button>
+          <button type="button" id="cartClearBtn" style="padding: 0.4rem 0.85rem; background: #fdf2e9; border: 1px solid #e67e22; color: #d35400; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+            Clear Cart
+          </button>
+        </div>
+
+        <!-- Current Cart State Summary -->
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 0.9rem; margin-bottom: 1rem;">
+          <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; color: #2c3e50; display: flex; justify-content: space-between;">
+            <span>Current Cart Contents</span>
+            <span id="cartItemsCount" style="color: #7f8c8d;">0 items</span>
+          </div>
+          <div id="cartItemsList" style="font-size: 0.85rem; color: #7f8c8d; min-height: 40px;">
+            <em>Cart is currently empty. Click '+ Add to Cart' above.</em>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.05rem; border-top: 1px solid #ddd; margin-top: 0.75rem; padding-top: 0.6rem; color: #2c3e50;">
+            <span>Calculated Total</span>
+            <span id="cartTotalDisplay">$0.00</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="cartSubmitBtn" style="margin-top: 0.5rem; background-color: #16a085;">
+          Submit Cart (trackOrderCreate)
+        </button>
+      </form>
+    </section>
+
     <footer>
       <div class="footer-content">
         <div class="logo">FashionHub</div>
@@ -436,6 +543,200 @@
             btn.disabled = false;
           }
         });
+
+      // -----------------------------------------------------------------
+      // Cart Simulation Form — trackOrderCreate (ORDER_CREATED event)
+      // -----------------------------------------------------------------
+      let cartItems = [];
+
+      function renderCartUI() {
+        const listEl = document.getElementById("cartItemsList");
+        const countEl = document.getElementById("cartItemsCount");
+        const totalEl = document.getElementById("cartTotalDisplay");
+        const currency = document.getElementById("cart_currency").value || "USD";
+
+        if (cartItems.length === 0) {
+          listEl.innerHTML = '<em>Cart is currently empty. Click \'+ Add to Cart\' above.</em>';
+          countEl.innerText = "0 items";
+          totalEl.innerText = `$0.00 ${currency}`;
+          return;
+        }
+
+        let total = 0;
+        let totalCount = 0;
+        let html = '<div style="display: flex; flex-direction: column; gap: 0.5rem;">';
+
+        cartItems.forEach((item, index) => {
+          const lineTotal = item.price * item.qty;
+          total += lineTotal;
+          totalCount += item.qty;
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 0.4rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
+              <div>
+                <strong>${item.name}</strong> <span style="color: #7f8c8d; font-size: 0.8rem;">(${item.sku})</span>
+                <div style="font-size: 0.8rem; color: #7f8c8d;">$${item.price.toFixed(2)} × ${item.qty} = <strong>$${lineTotal.toFixed(2)}</strong></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <button type="button" onclick="window._adjustCartItem(${index}, -1)" style="padding: 0.2rem 0.5rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">-</button>
+                <span style="font-weight: 600; font-size: 0.85rem; min-width: 1.2rem; text-align: center;">${item.qty}</span>
+                <button type="button" onclick="window._adjustCartItem(${index}, 1)" style="padding: 0.2rem 0.5rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">+</button>
+                <button type="button" onclick="window._removeCartItem(${index})" style="margin-left: 0.4rem; padding: 0.2rem 0.5rem; background: #fed7d7; border: 1px solid #feb2b2; color: #c53030; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">✕</button>
+              </div>
+            </div>
+          `;
+        });
+
+        html += '</div>';
+        listEl.innerHTML = html;
+        countEl.innerText = `${totalCount} item${totalCount === 1 ? '' : 's'}`;
+        totalEl.innerText = `$${total.toFixed(2)} ${currency}`;
+      }
+
+      window._adjustCartItem = function (index, delta) {
+        if (!cartItems[index]) return;
+        cartItems[index].qty += delta;
+        if (cartItems[index].qty <= 0) {
+          cartItems.splice(index, 1);
+        }
+        renderCartUI();
+      };
+
+      window._removeCartItem = function (index) {
+        if (!cartItems[index]) return;
+        cartItems.splice(index, 1);
+        renderCartUI();
+      };
+
+      document.querySelectorAll(".cart-add-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const sku = this.getAttribute("data-sku");
+          const name = this.getAttribute("data-name");
+          const price = parseFloat(this.getAttribute("data-price"));
+
+          const existing = cartItems.find(i => i.sku === sku);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cartItems.push({ sku, name, price, qty: 1 });
+          }
+          renderCartUI();
+        });
+      });
+
+      document.getElementById("cartAddAllBtn").addEventListener("click", function () {
+        const catalog = [
+          { sku: "TEE-WHT", name: "Classic White Tee", price: 29.99 },
+          { sku: "JNS-BLU", name: "Slim Denim Jeans", price: 69.00 },
+          { sku: "SNK-LTH", name: "Urban Leather Sneakers", price: 120.00 },
+        ];
+        catalog.forEach(item => {
+          const existing = cartItems.find(i => i.sku === item.sku);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cartItems.push({ ...item, qty: 1 });
+          }
+        });
+        renderCartUI();
+      });
+
+      function generateRandomCartOrderId() {
+        return "CART-" + Math.floor(100 + Math.random() * 900);
+      }
+
+      // Initialize random order_id on page load
+      const cartOrderIdInput = document.getElementById("cart_order_id");
+      if (cartOrderIdInput) {
+        cartOrderIdInput.value = generateRandomCartOrderId();
+      }
+
+      document.getElementById("cartClearBtn").addEventListener("click", function () {
+        cartItems = [];
+        document.getElementById("cart_order_id").value = generateRandomCartOrderId();
+        renderCartUI();
+      });
+
+      document.getElementById("cart_currency").addEventListener("change", renderCartUI);
+
+      document.getElementById("cartSimForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Every time user clicks submit, generate a random order_id inside the simulation
+        const orderId = generateRandomCartOrderId();
+        document.getElementById("cart_order_id").value = orderId;
+
+        if (cartItems.length === 0) {
+          alert("Your cart is empty! Please click '+ Add to Cart' on one or more products first.");
+          return;
+        }
+
+        const btn = document.getElementById("cartSubmitBtn");
+        const originalBtnText = btn.innerText;
+
+        btn.innerText = "Syncing Cart...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+
+        const currency = document.getElementById("cart_currency").value || "USD";
+        const email = document.getElementById("cart_email").value.trim();
+        const phone = document.getElementById("cart_phone").value.trim();
+
+        const itemsPayload = cartItems.map(item => ({
+          product_id: item.sku,
+          sku: item.sku,
+          name: item.name,
+          price: item.price,
+          qty: item.qty
+        }));
+
+        const totalAmount = itemsPayload.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+        const orderPayload = {
+          order_id: orderId,
+          items: itemsPayload,
+          currency: currency,
+          customer: email || phone || undefined,
+          customer_email: email || undefined,
+          customer_phone: phone || undefined,
+          metadata: {
+            order_id: orderId,
+            items: itemsPayload,
+            currency: currency,
+            customer_email: email || undefined,
+            customer_phone: phone || undefined
+          }
+        };
+
+        if (window.BlizTracker && window.BlizTracker.isActive()) {
+          if (typeof window.BlizTracker.trackOrderCreate === "function") {
+            const success = window.BlizTracker.trackOrderCreate(orderPayload, email);
+            if (success) {
+              console.log("[Bliz] Cart sync captured (ORDER_CREATED):", orderPayload);
+              setTimeout(() => {
+                alert(`Cart Synced Successfully!\n\nOrder ID: ${orderId}\nItems: ${itemsPayload.length} product(s)\nCalculated Total: $${totalAmount.toFixed(2)} ${currency}\n\nEvent ORDER_CREATED has been emitted.`);
+                btn.innerText = originalBtnText;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+              }, 800);
+            }
+          } else {
+            console.log("[Bliz] Cart sync captured (ORDER_CREATED):", orderPayload);
+            setTimeout(() => {
+              alert(`Cart Synced Successfully!\n\nOrder ID: ${orderId}\nItems: ${itemsPayload.length} product(s)\nCalculated Total: $${totalAmount.toFixed(2)} ${currency}\n\nEvent ORDER_CREATED prepared.`);
+              btn.innerText = originalBtnText;
+              btn.style.opacity = "1";
+              btn.disabled = false;
+            }, 800);
+          }
+        } else {
+          alert(
+            "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
+          );
+          btn.innerText = originalBtnText;
+          btn.style.opacity = "1";
+          btn.disabled = false;
+        }
+      });
     </script>
   </body>
 </html>

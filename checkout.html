@@ -4,45 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout | FashionHub</title>
-        <!-- <script>
-  (function() {
-    var script = document.createElement('script');
-    script.id = "bliz-snippet";
-    script.setAttribute("data-key", "8zP9g59qy1npGlFQ85EJKNL7QjQ-iRGFA5V0CfjJpxs");
-    script.src = './tracker.js'
-    script.async = true;
-    document.head.appendChild(script);
-  })(); -->
-<!-- </script> -->
-    <!-- <script>
-      (function () {
-        var script = document.createElement("script");
+    <script>
+      (function() {
+        var script = document.createElement('script');
         script.id = "bliz-snippet";
-        script.setAttribute(
-          "data-key",
-          "ChvR4pZCUFuX_QLuJzJpdUnABFrhlnCA_1WFmRjkQTY",
-        );
-        script.src ='./tracker.js'
+        script.setAttribute("data-key", "59XrpqH3pM84WSh_AeGMLEhSEpMqicTkqRQ2dbll4aU");
+        script.setAttribute("data-url", "http://localhost:3003/api/v1/external-analytics/web");
+        script.src = 'http://localhost:3003/scripts/blizid.script.js';
         script.async = true;
         document.head.appendChild(script);
       })();
-    </script> -->
-    <!-- Google Tag Manager -->
-    
-    <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-K3VN9TJ6");
     </script>
-
-    <!-- End Google Tag Manager -->
     <style>
       /* Reset and base styles */
       * {
@@ -55,6 +27,7 @@
       body {
         color: #333;
         line-height: 1.6;
+        background-color: #f4f7f6;
       }
 
       /* Header styles */
@@ -101,7 +74,6 @@
         color: #3498db;
       }
 
-      /* Special style for Nav Link */
       .nav-special {
         color: #e67e22 !important;
         font-weight: 700 !important;
@@ -116,9 +88,9 @@
         color: #fff !important;
       }
 
-      /* Checkout section */
+      /* Sections */
       .checkout {
-        padding: 8rem 5% 5rem;
+        padding: 8rem 5% 2rem;
         max-width: 800px;
         margin: 0 auto;
       }
@@ -130,13 +102,15 @@
         color: #2c3e50;
       }
 
-      .checkout-form {
-        background-color: #f8f9fa;
+      .card-container {
+        background-color: #fff;
         padding: 2rem;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
       }
 
+      /* Forms */
       .form-group {
         margin-bottom: 1.5rem;
       }
@@ -147,7 +121,7 @@
         font-weight: 500;
       }
 
-      .form-group input {
+      .form-group input, .form-group select {
         width: 100%;
         padding: 0.8rem;
         border: 1px solid #ddd;
@@ -158,9 +132,9 @@
       .order-summary {
         margin-top: 2rem;
         padding: 1.5rem;
-        background-color: #fff;
+        background-color: #f8f9fa;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #eee;
       }
 
       .summary-item {
@@ -178,6 +152,7 @@
         padding-top: 1rem;
       }
 
+      /* Buttons */
       .btn {
         display: block;
         width: 100%;
@@ -197,11 +172,52 @@
         background-color: #2980b9;
       }
 
+      /* Test Hub Styles */
+      .test-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .test-btn {
+        padding: 1rem;
+        background: #fff;
+        border: 2px solid #bdc3c7;
+        border-radius: 6px;
+        color: #2c3e50;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+      }
+
+      .test-btn:hover {
+        border-color: #3498db;
+        color: #3498db;
+      }
+
+      .test-label {
+        grid-column: span 2;
+        font-weight: bold;
+        margin-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+        color: #7f8c8d;
+      }
+
+      /* Footer */
       footer {
         background-color: #1a252f;
         color: #fff;
         padding: 3rem 5%;
         text-align: center;
+        margin-top: 4rem;
       }
 
       .footer-content {
@@ -214,10 +230,13 @@
       }
 
       .social-links a {
-        color: #fff;
+        color: #3498db;
         margin: 0 0.5rem;
-        font-size: 1.5rem;
         text-decoration: none;
+      }
+
+      .social-links a:hover {
+        text-decoration: underline;
       }
 
       .copyright {
@@ -231,43 +250,33 @@
       <nav class="navbar">
         <div class="logo">FashionHub</div>
         <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="index.html#featured">Products</a></li>
-          <li><a href="checkout.html" class="nav-special">Captcha Demo</a></li>
+          <li><a href="index.html" id="nav-home">Home</a></li>
+          <li><a href="index.html#featured" data-track="nav-products">Products</a></li>
+          <li><a href="checkout.html" class="nav-special" name="nav-demo">Captcha Demo</a></li>
         </ul>
       </nav>
     </header>
 
     <section class="checkout">
       <h2 class="section-title">Checkout</h2>
-      <form class="checkout-form" id="orderForm">
+      
+      <!-- Primary Order Form -->
+      <form class="card-container" id="orderForm">
         <div class="form-group">
           <label for="name">Full Name</label>
           <input type="text" id="name" placeholder="John Doe" required />
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="john@example.com"
-            required />
+          <input type="email" id="email" placeholder="john@example.com" required />
         </div>
         <div class="form-group">
           <label for="address">Shipping Address</label>
-          <input
-            type="text"
-            id="address"
-            placeholder="123 Main St, City, State, ZIP"
-            required />
+          <input type="text" id="address" placeholder="123 Main St, City, State, ZIP" required />
         </div>
         <div class="form-group">
           <label for="card">Card Number</label>
-          <input
-            type="text"
-            id="card"
-            placeholder="1234 5678 9012 3456"
-            required />
+          <input type="text" id="card" placeholder="1234 5678 9012 3456" required />
         </div>
         <div class="order-summary">
           <div class="summary-item">
@@ -280,78 +289,322 @@
           </div>
           <div class="summary-total">
             <span>Total</span>
-            <!-- We will scrape this value -->
             <span id="totalDisplay">$34.99</span>
           </div>
         </div>
         <button type="submit" class="btn" id="submitBtn">Place Order</button>
       </form>
-    </section>
 
-    <section class="checkout" style="padding-top: 0; margin-top: -2rem;">
-      <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 1rem;">Test Conversion</h2>
-      <form class="checkout-form" id="leadForm">
+      <!-- Conversion Lead Form -->
+      <form class="card-container" id="leadForm">
+        <h3 style="margin-bottom: 1rem;">Newsletter Signup</h3>
         <div class="form-group">
           <label for="lead_email">Email for Newsletter</label>
           <input type="email" id="lead_email" placeholder="subscriber@example.com" required />
         </div>
         <div class="form-group">
           <label for="lead_event">Conversion Type</label>
-          <select id="lead_event" required style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background-color: #fff;">
+          <select id="lead_event" required>
             <option value="LEAD_CAPTURED">LEAD</option>
-            <option value="LEAD_CAPTURED" selected>SIGNUP</option>
-            <option value="APP_INSTALLED">APP_INSTALL</option>
+            <option value="SIGNUP" selected>SIGNUP</option>
             <option value="NEWSLETTER_SUBSCRIBED">EMAIL_COLLECTED</option>
-            <option value="FORM_SUBMITTED">FORM_SUBMITTED</option>
-            <option value="CUSTOM_EVENT">CUSTOM</option>
           </select>
         </div>
         <button type="submit" class="btn" id="leadBtn" style="margin-top: 1rem;">Subscribe (Trigger Conversion)</button>
+      </form>
+
+      <!-- Cart Simulation Form (ORDER_CREATED Event) -->
+      <form class="card-container" id="cartSimForm" style="background: #ffffff; border: 1.5px solid #16a085;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="color: #16a085; margin: 0;">Cart Simulation (ORDER_CREATED)</h3>
+          <span style="background: #e8f8f5; color: #16a085; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">trackOrderCreate</span>
+        </div>
+        <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1.25rem;">
+          Simulate a user adding products to their cart. Submitting will fire the <code>ORDER_CREATED</code> conversion event via <code>window.BlizTracker.trackOrderCreate()</code>.
+        </p>
+
+        <!-- Order & Currency inputs -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_order_id">Cart / Order ID</label>
+            <input type="text" id="cart_order_id" value="CART-101" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_currency">Currency</label>
+            <select id="cart_currency">
+              <option value="USD" selected>USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GEL">GEL (₾)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Customer email and phone -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_email">Customer Email</label>
+            <input type="email" id="cart_email" placeholder="customer@example.com" value="shopper@example.com" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="cart_phone">Customer Phone</label>
+            <input type="tel" id="cart_phone" placeholder="+1234567890" value="+1555019234" />
+          </div>
+        </div>
+
+        <!-- 3 Products to Add -->
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Products Catalog (Add to Cart)</label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
+          
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Classic White Tee</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: TEE-WHT • $29.99</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="TEE-WHT" data-name="Classic White Tee" data-price="29.99" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Slim Denim Jeans</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: JNS-BLU • $69.00</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="JNS-BLU" data-name="Slim Denim Jeans" data-price="69.00" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+          <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 0.8rem; background: #fafafa; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem; color: #2c3e50;">Urban Leather Sneakers</div>
+              <div style="font-size: 0.8rem; color: #7f8c8d;">SKU: SNK-LTH • $120.00</div>
+            </div>
+            <button type="button" class="cart-add-btn" data-sku="SNK-LTH" data-name="Urban Leather Sneakers" data-price="120.00" style="margin-top: 0.6rem; padding: 0.45rem 0.8rem; background: #27ae60; color: #fff; border: none; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+              + Add to Cart
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <button type="button" id="cartAddAllBtn" style="padding: 0.4rem 0.85rem; background: #e8f8f5; border: 1px solid #16a085; color: #16a085; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+            + Add All 3 Products
+          </button>
+          <button type="button" id="cartClearBtn" style="padding: 0.4rem 0.85rem; background: #fdf2e9; border: 1px solid #e67e22; color: #d35400; border-radius: 4px; font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+            Clear Cart
+          </button>
+        </div>
+
+        <!-- Current Cart State Summary -->
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 0.9rem; margin-bottom: 1rem;">
+          <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; color: #2c3e50; display: flex; justify-content: space-between;">
+            <span>Current Cart Contents</span>
+            <span id="cartItemsCount" style="color: #7f8c8d;">0 items</span>
+          </div>
+          <div id="cartItemsList" style="font-size: 0.85rem; color: #7f8c8d; min-height: 40px;">
+            <em>Cart is currently empty. Click '+ Add to Cart' above.</em>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.05rem; border-top: 1px solid #ddd; margin-top: 0.75rem; padding-top: 0.6rem; color: #2c3e50;">
+            <span>Calculated Total</span>
+            <span id="cartTotalDisplay">$0.00</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="cartSubmitBtn" style="margin-top: 0.5rem; background-color: #16a085;">
+          Submit Cart (trackOrderCreate)
+        </button>
+      </form>
+
+      <!--
+        Network Interceptor Simulation Form
+        NOTE: this block previously appeared twice in the page (duplicate
+        id="networkSimForm") and had no submit handler wired up at all, so
+        submitting it just did a native page reload with query params
+        appended. Deduped to a single instance, and the submit handler is
+        implemented in the <script> block below — it reads the form's own
+        fields (email, event type, fetch vs XHR) and fires a real network
+        request on submit, which is exactly the pattern the NETWORK layer
+        interceptor is meant to catch: a form submit that triggers a
+        backend API call, not a form submit that IS the tracked event.
+      -->
+      <form class="card-container" id="networkSimForm" style="background: #f4f6f7; border: 1px solid #bdc3c7;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">Network Auto-Capture Simulator</h3>
+        <p style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 1rem;">Simulate a real form submission that triggers a backend fetch/XHR call. The Bliz NETWORK interceptor should catch the response, not the submit event itself.</p>
+
+        <div class="form-group">
+          <label for="sim_email">Email Payload</label>
+          <input type="email" id="sim_email" value="test-user@bliz.cc" required />
+        </div>
+
+        <div class="form-group">
+          <label for="sim_event">Event Name</label>
+          <select id="sim_event" required>
+            <option value="SIGNUP" selected>SIGNUP (Users API)</option>
+            <option value="REVENUE">REVENUE (99.90 USD)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Request Client</label>
+          <div style="display: flex; gap: 2rem; align-items: center;">
+            <label style="font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+              <input type="radio" name="sim_client" value="fetch" checked /> fetch() API
+            </label>
+            <label style="font-weight: normal; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+              <input type="radio" name="sim_client" value="xhr" /> XMLHttpRequest (XHR)
+            </label>
+          </div>
+        </div>
+
+        <div id="simStatus" style="margin-top: 1rem; font-size: 0.9rem; color: #7f8c8d; min-height: 1.2em;"></div>
+
+        <button type="submit" class="btn" id="simBtn" style="margin-top: 1rem; background-color: #2980b9;">
+          Submit Simulated Form (Triggers Interceptable Request)
+        </button>
+      </form>
+
+      <!-- NEW: Analytics Testing Hub (Click Simulators) -->
+      <div class="card-container" style="background: #fdfbf7; border: 1px dashed #e67e22;">
+        <h3 style="color: #e67e22; text-align: center;">Analytics Edge-Case Testing</h3>
+        <p style="text-align: center; font-size: 0.9rem; color: #7f8c8d; margin-bottom: 1rem;">Click these elements to test the PII scrubbing and identifier fallbacks in your Network tab.</p>
+        
+        <div class="test-grid">
+          
+          <div class="test-label">1. PII Scrubbing Tests</div>
+          <!-- Tests email extraction -->
+          <button class="test-btn" id="test-email-btn">Contact: john.doe@bliz.cc</button>
+          <!-- Tests CC / Number extraction -->
+          <button class="test-btn" id="test-cc-btn">Update Card 4111222233334444</button>
+          <!-- Tests Intent checking (tel:) -->
+          <a href="tel:+995322110626" class="test-btn" id="test-phone-link">Call: +995 322 110 626</a>
+          <!-- Tests Intent checking (mailto:) -->
+          <a href="mailto:support@fashionhub.com" class="test-btn">support@fashionhub.com</a>
+
+          <div class="test-label">2. Identifier Fallback Tests (Checking Network Payload for "[name]")</div>
+          <!-- Should yield [btn-with-id] -->
+          <button id="btn-with-id" class="test-btn">Has ID</button>
+          <!-- Should yield [btn-with-name] -->
+          <button name="btn-with-name" class="test-btn">Has Name Attr</button>
+          <!-- Should yield [btn-with-test-id] -->
+          <button data-testid="btn-with-test-id" class="test-btn">Has Data-TestID</button>
+          <!-- Should yield [Button] (Fallback) -->
+          <button class="test-btn">No Identifiers at All</button>
+
+          <div class="test-label">3. Missing Text / Icon Tests</div>
+          <!-- Tests aria-label extraction when no text exists -->
+          <button aria-label="Search Catalog" class="test-btn" id="search-icon-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+          <!-- Tests total fallback when absolutely nothing is provided -->
+          <a href="#" class="test-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </a>
+
+          <div class="test-label">4. Simulated Network Call Tests (Fetch vs XHR)</div>
+          <button class="test-btn" id="btn-simulate-api" style="background: #e8f8f5; border-color: #2ecc71; color: #27ae60;">
+            Simulate Users (Fetch)
+          </button>
+          <button class="test-btn" id="btn-simulate-revenue" style="background: #fdf2e9; border-color: #e67e22; color: #d35400;">
+            Simulate Revenue (Fetch)
+          </button>
+          <button class="test-btn" id="btn-simulate-users-xhr" style="background: #eaf2f8; border-color: #2980b9; color: #1f618d;">
+            Simulate Users (XHR)
+          </button>
+          <button class="test-btn" id="btn-simulate-revenue-xhr" style="background: #f5eef8; border-color: #8e44ad; color: #6c3483;">
+            Simulate Revenue (XHR)
+          </button>
+
+        </div>
+      </div>
+
+      <!--
+        Native Form Submit Test (real page reload / navigation)
+
+        Every other form on this page calls e.preventDefault() in its
+        submit handler, which means the page never actually navigates away
+        — that's convenient for demos, but it never exercises the one case
+        that matters most in production: a form that submits natively
+        (no JS intercepting it, or a JS handler that lets the default
+        action proceed) and the browser starts unloading the page WHILE
+        the Bliz tracking request is still in flight.
+
+        This form intentionally has NO submit handler at all. On submit,
+        the browser will navigate to this same page with the field value
+        appended as a query string (GET) — a real, full page reload.
+
+        What this is actually testing: the global delegated "submit"
+        listener in blizid.script.js (see setupListeners -> SUBMITS stage)
+        fires sendEventToAPI(), which calls fetch(..., { keepalive: true }).
+        `keepalive: true` is exactly the flag that's supposed to let a
+        request survive page unload — this form is how you verify that
+        promise actually holds in a real browser, not just in theory.
+
+        After the page reloads, a small banner below confirms the
+        navigation actually happened (so you can visually distinguish
+        "the interceptor didn't fire" from "the page didn't even reload").
+      -->
+      <div id="nativeReloadBanner" class="card-container" style="display: none; background: #eafaf1; border: 1px solid #2ecc71;">
+        <strong style="color: #27ae60;">✓ Page reloaded natively.</strong>
+        <span style="color: #2c3e50;"> Check the Network tab for a SUBMITS event that was sent via <code>fetch(..., { keepalive: true })</code> just before this navigation started — that's the request you're verifying survived.</span>
+      </div>
+
+      <form class="card-container" id="nativeSubmitForm" action="checkout.html" method="GET" style="background: #fdfefe; border: 1px solid #bdc3c7;">
+        <h3 style="margin-bottom: 1rem; color: #2c3e50;">5. Native Form Submit Test (Real Page Reload)</h3>
+        <p style="font-size: 0.9rem; color: #7f8c8d; margin-bottom: 1rem;">
+          This form has <strong>no JavaScript handler</strong> — submitting it triggers a real browser navigation, not a simulated one. Use this to confirm the SUBMITS tracking event actually survives page unload via <code>keepalive: true</code>, rather than being silently dropped.
+        </p>
+        <div class="form-group">
+          <label for="native_test_field">Test Field (appears in URL after reload)</label>
+          <input type="text" id="native_test_field" name="native_test_field" value="native-reload-test" />
+        </div>
+        <button type="submit" class="btn" id="nativeSubmitBtn" style="background-color: #16a085;">
+          Submit Natively (Will Reload The Page)
+        </button>
       </form>
     </section>
 
     <footer>
       <div class="footer-content">
-        <div class="logo">FashionHub</div>
+        <div class="logo" style="color: #fff;">FashionHub</div>
         <div class="social-links">
-          <a href="#">Facebook</a>
-          <a href="#">Instagram</a>
-          <a href="#">Twitter</a>
-          <a href="#">Pinterest</a>
+          <a href="#" data-track="social-fb">Facebook</a>
+          <a href="#" data-track="social-ig">Instagram</a>
+          <a href="#" data-track="social-tw">Twitter</a>
         </div>
         <p>123 Fashion Street, Style City, SC 12345</p>
-        <p>Email: info@fashionhub.com | Phone: (123) 456-7890</p>
+        <!-- Real mailto and tel links to test footer clicks naturally -->
+        <p>
+          Email: <a href="mailto:info@fashionhub.com" style="color:#3498db; text-decoration:none;">info@fashionhub.com</a> | 
+          Phone: <a href="tel:1234567890" style="color:#3498db; text-decoration:none;">(123) 456-7890</a>
+        </p>
         <p class="copyright">© 2025 FashionHub. All rights reserved.</p>
       </div>
     </footer>
 
-    <!-- REALISTIC TRACKING LOGIC -->
     <script>
-      document
-        .getElementById("orderForm")
-        .addEventListener("submit", function (e) {
+      // Revenue Tracking Simulation
+      document.getElementById("orderForm").addEventListener("submit", function (e) {
           e.preventDefault();
 
           const btn = document.getElementById("submitBtn");
           const originalBtnText = btn.innerText;
 
-          // Visual feedback
           btn.innerText = "Processing...";
           btn.style.opacity = "0.7";
           btn.disabled = true;
 
-          // 1. Extract realistic data from the DOM
           const customerName = document.getElementById("name").value;
           const email = document.getElementById("email").value;
-          const totalText = document.getElementById("totalDisplay").innerText; // "$34.99"
+          const totalText = document.getElementById("totalDisplay").innerText;
           const numericValue = parseFloat(totalText.replace(/[^0-9.]/g, ""));
           const productName = document.getElementById("prodName").innerText;
 
-          // 2. Prepare the payload
           const orderData = {
             value: numericValue,
             currency: "USD",
-            order_id: "FH-" + Date.now().toString().slice(-6), // Realistic timestamp-based ID
+            order_id: "FH-" + Date.now().toString().slice(-6),
             product_title: productName + " (Customer: " + customerName + ")",
             event: "PURCHASE_COMPLETED",
             customer: email,
@@ -362,35 +615,27 @@
             }
           };
 
-          // 3. Send to BlizTracker
           if (window.BlizTracker && window.BlizTracker.isActive()) {
             const success = window.BlizTracker.trackRevenue(orderData, email);
-
             if (success) {
               console.log("[Bliz] Revenue captured:", orderData);
               setTimeout(() => {
-                alert(
-                  `Order Successful!\n\nID: ${orderData.order_id}\nAmount: $${orderData.value}\n\nThe Bliz Script has sent this event to the dashboard.`,
-                );
+                alert(`Order Successful!\n\nID: ${orderData.order_id}\nAmount: $${orderData.value}\n\nThe Bliz Script has sent this event.`);
                 btn.innerText = originalBtnText;
                 btn.style.opacity = "1";
                 btn.disabled = false;
               }, 800);
             }
           } else {
-            // If no session is active (no bliz_sid in URL)
-            alert(
-              "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
-            );
+            alert("No active Bliz session found. Add ?blizid=... to the URL to test tracking.");
             btn.innerText = originalBtnText;
             btn.style.opacity = "1";
             btn.disabled = false;
           }
-        });
+      });
 
-      document
-        .getElementById("leadForm")
-        .addEventListener("submit", function (e) {
+      // Conversion Tracking Simulation
+      document.getElementById("leadForm").addEventListener("submit", function (e) {
           e.preventDefault();
 
           const btn = document.getElementById("leadBtn");
@@ -406,36 +651,433 @@
           const conversionData = {
             event: eventType,
             name: "Newsletter signup",
-            metadata: {
-              email: email,
-              source: "checkout_test_page"
-            },
+            metadata: { email: email, source: "checkout_test_page" },
             customer: email,
           };
 
           if (window.BlizTracker && window.BlizTracker.isActive()) {
             const success = window.BlizTracker.trackConversion(conversionData, email);
-
             if (success) {
               console.log("[Bliz] Conversion captured:", conversionData);
               setTimeout(() => {
-                alert(
-                  `Conversion Successful!\n\nEvent: ${conversionData.event}\n\nThe Bliz Script has sent this conversion event to the dashboard.`,
-                );
+                alert(`Conversion Successful!\n\nEvent: ${conversionData.event}\n\nThe Bliz Script has sent this conversion event.`);
                 btn.innerText = originalBtnText;
                 btn.style.opacity = "1";
                 btn.disabled = false;
               }, 800);
             }
           } else {
-            alert(
-              "Form submitted, but no active Bliz session found. Add ?bliz_sid=... to the URL to test tracking.",
-            );
+            alert("No active Bliz session found. Add ?blizid=... to the URL to test tracking.");
             btn.innerText = originalBtnText;
             btn.style.opacity = "1";
             btn.disabled = false;
           }
+      });
+
+      // -----------------------------------------------------------------
+      // Cart Simulation Form — trackOrderCreate (ORDER_CREATED event)
+      // -----------------------------------------------------------------
+      let cartItems = [];
+
+      function renderCartUI() {
+        const listEl = document.getElementById("cartItemsList");
+        const countEl = document.getElementById("cartItemsCount");
+        const totalEl = document.getElementById("cartTotalDisplay");
+        const currency = document.getElementById("cart_currency").value || "USD";
+
+        if (cartItems.length === 0) {
+          listEl.innerHTML = '<em>Cart is currently empty. Click \'+ Add to Cart\' above.</em>';
+          countEl.innerText = '0 items';
+          totalEl.innerText = '$0.00';
+          return;
+        }
+
+        let total = 0;
+        let totalCount = 0;
+        let html = '<div style="display: flex; flex-direction: column; gap: 0.4rem;">';
+
+        cartItems.forEach((item, index) => {
+          const lineTotal = item.price * item.qty;
+          total += lineTotal;
+          totalCount += item.qty;
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 0.4rem 0.6rem; border-radius: 4px; border: 1px solid #e2e8f0;">
+              <div>
+                <strong>${item.name}</strong> <span style="color: #7f8c8d; font-size: 0.8rem;">(${item.sku})</span>
+                <div style="font-size: 0.8rem; color: #7f8c8d;">$${item.price.toFixed(2)} × ${item.qty} = <strong>$${lineTotal.toFixed(2)}</strong></div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <button type="button" onclick="window._adjustCartItem(${index}, -1)" style="padding: 0.2rem 0.5rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">-</button>
+                <span style="font-weight: 600; font-size: 0.85rem; min-width: 1.2rem; text-align: center;">${item.qty}</span>
+                <button type="button" onclick="window._adjustCartItem(${index}, 1)" style="padding: 0.2rem 0.5rem; background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">+</button>
+                <button type="button" onclick="window._removeCartItem(${index})" style="margin-left: 0.4rem; padding: 0.2rem 0.5rem; background: #fed7d7; border: 1px solid #feb2b2; color: #c53030; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">✕</button>
+              </div>
+            </div>
+          `;
         });
+
+        html += '</div>';
+        listEl.innerHTML = html;
+        countEl.innerText = `${totalCount} item${totalCount === 1 ? '' : 's'}`;
+        totalEl.innerText = `$${total.toFixed(2)} ${currency}`;
+      }
+
+      window._adjustCartItem = function (index, delta) {
+        if (!cartItems[index]) return;
+        cartItems[index].qty += delta;
+        if (cartItems[index].qty <= 0) {
+          cartItems.splice(index, 1);
+        }
+        renderCartUI();
+      };
+
+      window._removeCartItem = function (index) {
+        if (!cartItems[index]) return;
+        cartItems.splice(index, 1);
+        renderCartUI();
+      };
+
+      document.querySelectorAll(".cart-add-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const sku = this.getAttribute("data-sku");
+          const name = this.getAttribute("data-name");
+          const price = parseFloat(this.getAttribute("data-price"));
+
+          const existing = cartItems.find(i => i.sku === sku);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cartItems.push({ sku, name, price, qty: 1 });
+          }
+          renderCartUI();
+        });
+      });
+
+      document.getElementById("cartAddAllBtn").addEventListener("click", function () {
+        const catalog = [
+          { sku: "TEE-WHT", name: "Classic White Tee", price: 29.99 },
+          { sku: "JNS-BLU", name: "Slim Denim Jeans", price: 69.00 },
+          { sku: "SNK-LTH", name: "Urban Leather Sneakers", price: 120.00 },
+        ];
+        catalog.forEach(item => {
+          const existing = cartItems.find(i => i.sku === item.sku);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cartItems.push({ ...item, qty: 1 });
+          }
+        });
+        renderCartUI();
+      });
+
+      function generateRandomCartOrderId() {
+        return "CART-" + Math.floor(100 + Math.random() * 900);
+      }
+
+      // Initialize random order_id on page load
+      const cartOrderIdInput = document.getElementById("cart_order_id");
+      if (cartOrderIdInput) {
+        cartOrderIdInput.value = generateRandomCartOrderId();
+      }
+
+      document.getElementById("cartClearBtn").addEventListener("click", function () {
+        cartItems = [];
+        document.getElementById("cart_order_id").value = generateRandomCartOrderId();
+        renderCartUI();
+      });
+
+      document.getElementById("cart_currency").addEventListener("change", renderCartUI);
+
+      document.getElementById("cartSimForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Every time user clicks submit, generate a random order_id inside the simulation
+        const orderId = generateRandomCartOrderId();
+        document.getElementById("cart_order_id").value = orderId;
+
+        if (cartItems.length === 0) {
+          alert("Your cart is empty! Please click '+ Add to Cart' on one or more products first.");
+          return;
+        }
+
+        const btn = document.getElementById("cartSubmitBtn");
+        const originalBtnText = btn.innerText;
+
+        btn.innerText = "Syncing Cart...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+
+        const currency = document.getElementById("cart_currency").value || "USD";
+        const email = document.getElementById("cart_email").value.trim();
+        const phone = document.getElementById("cart_phone").value.trim();
+
+        const itemsPayload = cartItems.map(item => ({
+          product_id: item.sku,
+          sku: item.sku,
+          name: item.name,
+          price: item.price,
+          qty: item.qty
+        }));
+
+        const totalAmount = itemsPayload.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+        const orderPayload = {
+          order_id: orderId,
+          items: itemsPayload,
+          currency: currency,
+          customer: email || phone || undefined,
+          customer_email: email || undefined,
+          customer_phone: phone || undefined,
+          metadata: {
+            order_id: orderId,
+            items: itemsPayload,
+            currency: currency,
+            customer_email: email || undefined,
+            customer_phone: phone || undefined
+          }
+        };
+
+        if (window.BlizTracker && window.BlizTracker.isActive()) {
+          const success = window.BlizTracker.trackOrderCreate(orderPayload, email);
+          if (success) {
+            console.log("[Bliz] Cart sync captured (ORDER_CREATED):", orderPayload);
+            setTimeout(() => {
+              alert(`Cart Synced Successfully!\n\nOrder ID: ${orderId}\nItems: ${itemsPayload.length} product(s)\nCalculated Total: $${totalAmount.toFixed(2)} ${currency}\n\nEvent ORDER_CREATED has been emitted.`);
+              btn.innerText = originalBtnText;
+              btn.style.opacity = "1";
+              btn.disabled = false;
+            }, 800);
+          }
+        } else {
+          alert("No active Bliz session found. Add ?blizid=... to the URL to test tracking.");
+          btn.innerText = originalBtnText;
+          btn.style.opacity = "1";
+          btn.disabled = false;
+        }
+      });
+
+      // -----------------------------------------------------------------
+      // Network Auto-Capture Simulator — form submit handler
+      //
+      // This is the piece that was missing: the form existed in the markup
+      // but nothing listened for its submit event, so submitting it just
+      // did a native page reload. This handler:
+      //   1. Reads the form's own fields (sim_email, sim_event, sim_client)
+      //      instead of hardcoding values, so the form is actually driven
+      //      by its inputs like a real checkout form would be.
+      //   2. Fires either fetch() or XHR to /api/simulate/users or
+      //      /api/simulate/revenue depending on the selected event type —
+      //      this is the "form submit triggers a backend API call" pattern
+      //      the NETWORK interceptor rule layer is built to catch (as
+      //      opposed to the FORM layer, which reads values directly off
+      //      the submitted form without needing a network round-trip).
+      // -----------------------------------------------------------------
+      document.getElementById("networkSimForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const btn = document.getElementById("simBtn");
+        const statusEl = document.getElementById("simStatus");
+        const originalBtnText = btn.innerText;
+
+        const email = document.getElementById("sim_email").value;
+        const eventType = document.getElementById("sim_event").value; // 'SIGNUP' | 'REVENUE'
+        const client = document.querySelector('input[name="sim_client"]:checked').value; // 'fetch' | 'xhr'
+
+        const isRevenue = eventType === "REVENUE";
+        const endpoint = isRevenue
+          ? "http://localhost:3003/api/simulate/revenue"
+          : "http://localhost:3003/api/simulate/users";
+
+        const payload = isRevenue
+          ? { amount: 99.90, currency: "USD", status: "success", email: email, order_id: "ORD-" + Math.floor(100 + Math.random() * 900) }
+          : { email: email, event: "SIGNUP", status: "success" };
+
+        btn.innerText = "Submitting...";
+        btn.style.opacity = "0.7";
+        btn.disabled = true;
+        statusEl.textContent = "Sending " + client.toUpperCase() + " request to " + endpoint + " ...";
+
+        function onDone(success, data, errMessage) {
+          btn.innerText = originalBtnText;
+          btn.style.opacity = "1";
+          btn.disabled = false;
+
+          if (success) {
+            console.log("[Simulate " + client.toUpperCase() + "] Response from " + endpoint + ":", data);
+            statusEl.textContent = "Request sent successfully via " + client.toUpperCase() + ". Check the Network tab / console for interceptor activity.";
+          } else {
+            console.error("[Simulate " + client.toUpperCase() + "] Error:", errMessage);
+            statusEl.textContent = "Request failed: " + errMessage;
+          }
+        }
+
+        if (client === "fetch") {
+          fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          })
+            .then(function (res) { return res.json(); })
+            .then(function (data) { onDone(true, data); })
+            .catch(function (err) { onDone(false, null, err.message); });
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", endpoint);
+          xhr.setRequestHeader("Content-Type", "application/json");
+          xhr.onload = function () {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              onDone(true, data);
+            } catch (err) {
+              onDone(false, null, "Response received but failed to parse JSON.");
+            }
+          };
+          xhr.onerror = function () {
+            onDone(false, null, "Connection error.");
+          };
+          xhr.send(JSON.stringify(payload));
+        }
+      });
+
+      // Simulated API Call trigger
+      document.getElementById("btn-simulate-api").addEventListener("click", function(e) {
+        e.preventDefault();
+        console.log("[Simulate] Triggering simulated call to http://localhost:3003/api/simulate/users...");
+        fetch("http://localhost:3003/api/simulate/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: "test-user@bliz.cc",
+            event: "SIGNUP",
+            status: "success"
+          })
+        })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(function(data) {
+          console.log("[Simulate] Response from /api/simulate/users:", data);
+          alert("Simulated request successful! Response logged in console.");
+        })
+        .catch(function(err) {
+          console.error("[Simulate] Error during fetch:", err);
+          alert("Simulated request failed: " + err.message);
+        });
+      });
+
+      // Simulated API Revenue trigger
+      document.getElementById("btn-simulate-revenue").addEventListener("click", function(e) {
+        e.preventDefault();
+        console.log("[Simulate] Triggering simulated call to http://localhost:3003/api/simulate/revenue...");
+        fetch("http://localhost:3003/api/simulate/revenue", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            amount: 99.90,
+            currency: "USD",
+            status: "success"
+          })
+        })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(function(data) {
+          console.log("[Simulate] Response from /api/simulate/revenue:", data);
+          alert("Simulated revenue request successful! Response logged in console.");
+        })
+        .catch(function(err) {
+          console.error("[Simulate] Error during fetch:", err);
+          alert("Simulated revenue request failed: " + err.message);
+        });
+      });
+
+      // Simulated XHR Users trigger
+      document.getElementById("btn-simulate-users-xhr").addEventListener("click", function(e) {
+        e.preventDefault();
+        console.log("[Simulate XHR] Triggering simulated call to http://localhost:3003/api/simulate/users...");
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:3003/api/simulate/users");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            console.log("[Simulate XHR] Response from /api/simulate/users:", data);
+            alert("Simulated XHR request successful! Response logged in console.");
+          } catch(err) {
+            console.error("[Simulate XHR] Error parsing response:", err);
+            alert("Simulated XHR request successful but failed to parse JSON.");
+          }
+        };
+        xhr.onerror = function() {
+          console.error("[Simulate XHR] Connection error");
+          alert("Simulated XHR request failed.");
+        };
+        xhr.send(JSON.stringify({
+          email: "test-user-xhr@bliz.cc",
+          event: "SIGNUP",
+          status: "success"
+        }));
+      });
+
+      // Simulated XHR Revenue trigger
+      document.getElementById("btn-simulate-revenue-xhr").addEventListener("click", function(e) {
+        e.preventDefault();
+        console.log("[Simulate XHR] Triggering simulated call to http://localhost:3003/api/simulate/revenue...");
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:3003/api/simulate/revenue");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            console.log("[Simulate XHR] Response from /api/simulate/revenue:", data);
+            alert("Simulated XHR revenue request successful! Response logged in console.");
+          } catch(err) {
+            console.error("[Simulate XHR] Error parsing response:", err);
+            alert("Simulated XHR revenue request successful but failed to parse JSON.");
+          }
+        };
+        xhr.onerror = function() {
+          console.error("[Simulate XHR] Connection error");
+          alert("Simulated XHR revenue request failed.");
+        };
+        xhr.send(JSON.stringify({
+          amount: 88.50,
+          currency: "USD",
+          status: "success"
+        }));
+      });
+
+      // Prevent default on the test links so they don't jump the page or try to open mail clients during testing
+      document.querySelectorAll('.test-btn').forEach(btn => {
+        if(btn.tagName.toLowerCase() === 'a') {
+          btn.addEventListener('click', e => e.preventDefault());
+        }
+      });
+
+      // -----------------------------------------------------------------
+      // Native Form Submit Test — post-reload confirmation banner
+      //
+      // Intentionally does NOT attach anything to nativeSubmitForm's
+      // submit event and does NOT call preventDefault anywhere near it —
+      // that would defeat the entire point of this test, which is to
+      // exercise a real, unintercepted browser navigation.
+      //
+      // This only reads the URL after the page has already reloaded, to
+      // give a visual "yes, the navigation genuinely happened" signal
+      // distinct from whether the SUBMITS tracking event was captured
+      // (that part is verified in the Network tab, not in this UI).
+      // -----------------------------------------------------------------
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        if (params.has("native_test_field")) {
+          var banner = document.getElementById("nativeReloadBanner");
+          if (banner) banner.style.display = "block";
+        }
+      })();
     </script>
   </body>
 </html>
